@@ -6,8 +6,16 @@ import MenuItem from "./MenuItem";
 import Avatar from "../Avatar";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
+import { User } from "@prisma/client";
+import { signOut } from "next-auth/react";
 
-const UserMenu = () => {
+interface UserMenuProps {
+  currentUser?: User | null;
+}
+
+const UserMenu: React.FC<UserMenuProps> = ({
+  currentUser
+}) => {
     const registerModal = useRegisterModal();
     const loginModal = useLoginModal();
     const [isOpen, setIsOpen] = useState(false);
@@ -76,6 +84,14 @@ const UserMenu = () => {
             "
           >
             <div className="flex flex-col cursor-pointer">
+              { currentUser ? (
+                <>
+                  <MenuItem 
+                    label="Loqout" 
+                    onClick={() => signOut()}
+                  />         
+                </>
+              ): (
                 <>
                   <MenuItem 
                     label="Login" 
@@ -86,6 +102,8 @@ const UserMenu = () => {
                     onClick={registerModal.onOpen}
                   />
                 </>
+              )}
+
             </div>
           </div>
         )}
